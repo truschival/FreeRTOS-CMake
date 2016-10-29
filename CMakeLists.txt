@@ -21,7 +21,7 @@ message(STATUS "Running ${CMAKE_COMMAND} ${CMAKE_VERSION} on ${CMAKE_PROJECT_NAM
 
 # User did not provide install prefix via cmake commandline
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT )
-  SET(CMAKE_INSTALL_PREFIX ${STAGING_DIR} )
+  SET(CMAKE_INSTALL_PREFIX ${STAGING_DIR} CACHE PATH "Installation Directory" FORCE)
 endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
 #-------------------------------------------------------------------------------

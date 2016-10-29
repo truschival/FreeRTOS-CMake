@@ -31,6 +31,12 @@ set(SRCS
   ${CMAKE_CURRENT_SOURCE_DIR}/portable/MemMang/heap_${FREERTOS_HEAP_ALLOCATOR}.c
   )
 
+if(CMAKE_BUILD_TYPE MATCHES Debug)
+  message(STATUS "Incluing OpenOCD Helper for FreeRTOS debugging")
+  SET(OPENOCD_HELPER_LINK_FLAGS "-Wl,--undefined=uxTopUsedPriority")
+  LIST(APPEND SRCS ${CMAKE_CURRENT_SOURCE_DIR}/FreeRTOS_openocd.c)
+endif(CMAKE_BUILD_TYPE MATCHES Debug )
+  
 #------------------------------
 # Output a library
 #------------------------------
@@ -41,7 +47,6 @@ SET_TARGET_PROPERTIES(
   COMPILE_DEFINITIONS ${PROCESSOR_FAMILY} 
   OUTPUT_NAME ${LIBRARY_NAME}
   VERSION ${LIBRARY_VERSION}
-  SOVERSION ${LIBRARY_VERSION}
   )
 
 
@@ -58,8 +63,10 @@ target_include_directories(
 # Add dependencies to library to pass
 # dependencies on to client executable
 TARGET_LINK_LIBRARIES( ${LIBRARY_NAME}
-    ${MODULE_DEPS}
-    )
+  INTERFACE
+  ${MODULE_DEPS}
+  ${OPENOCD_HELPER_LINK_FLAGS}
+  )
 
 
 #-----
